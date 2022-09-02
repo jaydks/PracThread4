@@ -4,15 +4,339 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="@dimen/margin_15"
+        android:layout_marginEnd="@dimen/margin_20"
+        android:text="0점"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_15"
+        android:layout_marginTop="@dimen/margin_20"
+        android:text="60초"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/wrap1"
+        android:layout_width="0dp"
+        android:layout_height="195dp"
+        android:layout_marginTop="@dimen/margin_15"
+        android:paddingStart="@dimen/margin_35"
+        app:layout_constraintEnd_toStartOf="@id/wrap2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/time">
+
+        <ImageView
+            android:id="@+id/table1_order"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/margin_55"
+            android:src="@drawable/order_menu1_1"
+            app:layout_constraintBottom_toTopOf="@+id/customer1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.6" />
+
+        <ImageView
+            android:id="@+id/customer1"
+            android:layout_width="@dimen/margin_60"
+            android:layout_height="@dimen/margin_60"
+            android:src="@drawable/customer4"
+            app:layout_constraintBottom_toTopOf="@id/table1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/table1_order"
+
+            />
+
+        <ImageView
+            android:id="@+id/table1"
+            android:layout_width="@dimen/margin_95"
+            android:layout_height="@dimen/margin_80"
+            android:src="@drawable/table1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/wrap2"
+        android:layout_width="0dp"
+        android:layout_height="195dp"
+        android:paddingEnd="@dimen/margin_20"
+        app:layout_constraintBottom_toBottomOf="@id/wrap1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/wrap1"
+        app:layout_constraintTop_toTopOf="@id/wrap1"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.5">
+
+        <ImageView
+            android:id="@+id/table2_order"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/margin_55"
+            android:src="@drawable/order_menu2_1"
+            app:layout_constraintBottom_toTopOf="@+id/customer2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.6" />
+
+        <ImageView
+            android:id="@+id/customer2"
+            android:layout_width="@dimen/margin_60"
+            android:layout_height="@dimen/margin_60"
+            android:src="@drawable/customer2"
+            app:layout_constraintBottom_toTopOf="@id/table2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/table2_order"
+
+            />
+
+        <ImageView
+            android:id="@+id/table2"
+            android:layout_width="@dimen/margin_95"
+            android:layout_height="@dimen/margin_80"
+            android:src="@drawable/table1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/wrap3"
+        android:layout_width="0dp"
+        android:layout_height="195dp"
+        android:layout_marginTop="@dimen/margin_15"
+        android:paddingStart="@dimen/margin_35"
+        app:layout_constraintEnd_toStartOf="@id/wrap4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/wrap1"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.5">
+
+        <ImageView
+            android:id="@+id/table3_order"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/margin_55"
+            android:src="@drawable/order_menu3_1"
+            app:layout_constraintBottom_toTopOf="@+id/customer3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.6" />
+
+        <ImageView
+            android:id="@+id/customer3"
+            android:layout_width="@dimen/margin_60"
+            android:layout_height="@dimen/margin_60"
+            android:src="@drawable/customer3"
+            app:layout_constraintBottom_toTopOf="@id/table3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/table3_order"
+
+            />
+
+        <ImageView
+            android:id="@+id/table3"
+            android:layout_width="@dimen/margin_95"
+            android:layout_height="@dimen/margin_80"
+            android:src="@drawable/table1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/wrap4"
+        android:layout_width="0dp"
+        android:layout_height="195dp"
+        android:paddingEnd="@dimen/margin_20"
+        app:layout_constraintBottom_toBottomOf="@id/wrap3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/wrap3"
+        app:layout_constraintTop_toTopOf="@id/wrap3"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.5">
+
+        <ImageView
+            android:id="@+id/table4_order"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/margin_55"
+            android:src="@drawable/order_menu2_1"
+            app:layout_constraintBottom_toTopOf="@+id/customer4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.6" />
+
+        <ImageView
+            android:id="@+id/customer4"
+            android:layout_width="@dimen/margin_60"
+            android:layout_height="@dimen/margin_60"
+            android:src="@drawable/customer2"
+            app:layout_constraintBottom_toTopOf="@id/table4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/table4_order"
+
+            />
+
+        <ImageView
+            android:id="@+id/table4"
+            android:layout_width="@dimen/margin_95"
+            android:layout_height="@dimen/margin_80"
+            android:src="@drawable/table1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/menutable1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_20"
+        app:layout_constraintEnd_toStartOf="@id/menutable1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/wrap3">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="@dimen/margin_130"
+                android:layout_height="@dimen/margin_110"
+                android:src="@drawable/table_menu_whole" />
+
+            <ImageView
+                android:id="@+id/menu1"
+                android:layout_width="@dimen/margin_75"
+                android:layout_height="@dimen/margin_75"
+                android:layout_gravity="top|center"
+                android:src="@drawable/pudding" />
+
+        </FrameLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/menutable2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_20"
+        app:layout_constraintEnd_toStartOf="@id/menutable3"
+        app:layout_constraintStart_toEndOf="@id/menutable1"
+        app:layout_constraintTop_toBottomOf="@id/wrap3">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="@dimen/margin_130"
+                android:layout_height="@dimen/margin_110"
+                android:src="@drawable/table_menu_whole" />
+
+            <ImageView
+                android:id="@+id/menu2"
+                android:layout_width="@dimen/margin_75"
+                android:layout_height="@dimen/margin_75"
+                android:layout_gravity="top|center"
+                android:src="@drawable/strawberrycake" />
+
+        </FrameLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/menutable3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_20"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/menutable2"
+        app:layout_constraintTop_toBottomOf="@id/wrap3">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="@dimen/margin_130"
+                android:layout_height="@dimen/margin_110"
+                android:src="@drawable/table_menu_whole" />
+
+            <ImageView
+                android:id="@+id/menu3"
+                android:layout_width="@dimen/margin_75"
+                android:layout_height="@dimen/margin_75"
+                android:layout_gravity="top|center"
+                android:src="@drawable/chicken" />
+
+        </FrameLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/start"
+        android:layout_width="@dimen/margin_130"
+        android:layout_height="@dimen/margin_60"
+        android:layout_marginBottom="@dimen/margin_25"
+        android:backgroundTint="@color/white"
+        android:text="시작"
+        android:textColor="@color/green"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
