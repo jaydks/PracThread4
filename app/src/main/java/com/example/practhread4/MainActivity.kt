@@ -1,7 +1,7 @@
 package com.example.practhread4
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     //배경음악
-    //
+    private var mp: MediaPlayer? = null
 
     var started = false // 타이머 실행여부
     var score = 0 // 점수
@@ -29,13 +29,6 @@ class MainActivity : AppCompatActivity() {
     private var img_array_order = arrayListOf<ImageView>()
     private var img_array_menu = arrayListOf<ImageView>()
 
-    // 메뉴 클릭시 크기 변화 사용 위한 bitmap 배열
-    var bit_array_menu = arrayListOf<Bitmap>()
-    var resized_bit_array_menu = arrayOfNulls<Bitmap>(3)
-    // 메뉴 이미지 변화시킬 가로, 세로
-    var bit_menu_width = 0
-    var bit_menu_height = 0
-
     //변수들의 상태 표시할 태그
     val TAG_ON1 = "menu1" // menu1을 원하는 손님이 있다
     val TAG_ON2 = "menu2"
@@ -46,15 +39,20 @@ class MainActivity : AppCompatActivity() {
     val TAG_MENU2 = "menu2"
     val TAG_MENU3 = "menu3"
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        mp = MediaPlayer.create(this, R.raw.music_main)
+        mp?.isLooping = true
+        mp?.start()
+
         //시간, 점수 초기화
-        binding.time.text = "60초"
-        binding.score.text = "0점"
+        binding.time.text = "30초"
+        binding.score.text = "0원"
 
         //테이블 배열, 초기화
         img_array_table = arrayListOf(
@@ -103,25 +101,12 @@ class MainActivity : AppCompatActivity() {
             img_array_menu[i].tag = TAG_OFF // 초기엔 해당 메뉴 원하는 손님 없음
         }
 
-        //메뉴 클릭시 크기 변화 사용 위한 bitmap 배열, 초기화
-        bit_array_menu = arrayListOf(
-            BitmapFactory.decodeResource(resources, R.drawable.pudding),
-            BitmapFactory.decodeResource(resources, R.drawable.strawberrycake),
-            BitmapFactory.decodeResource(resources, R.drawable.chicken)
-        )
-        //bit_array_menu[0] = BitmapFactory.decodeResource(resources, R.drawable.pudding)
-        //bit_array_menu[1] = BitmapFactory.decodeResource(resources, R.drawable.strawberrycake)
-        //bit_array_menu[2] = BitmapFactory.decodeResource(resources, R.drawable.chicken)
-        bit_menu_width = bit_array_menu[0].width
-        bit_menu_height = bit_array_menu[0].height
-
-
         //시작버튼 클릭
         binding.start.setOnClickListener {
             binding.start.visibility = View.INVISIBLE // 시작 누르면 시작버튼 사라짐
             binding.score.visibility = View.VISIBLE // 시작 누르면 점수텍스트 나타남
 
-            //시간 쓰레드 시작
+            //타이머 쓰레드 시작
             Thread(start()).start()
 
             //각 테이블 쓰레드 시작
@@ -136,67 +121,52 @@ class MainActivity : AppCompatActivity() {
         img_array_menu[0].setOnClickListener {
             // 해당 매뉴 주문이 들어왔을 때만 동작 (-> menu1 주문하고 TAG_ON1으로 설정했었음)
             if (img_array_table[0].tag == TAG_ON1 || img_array_table[1].tag == TAG_ON1 || img_array_table[2].tag == TAG_ON1 || img_array_table[3].tag == TAG_ON1) {
-                Toast.makeText(applicationContext, "푸딩", Toast.LENGTH_SHORT).show()
-                resized_bit_array_menu[0] = Bitmap.createScaledBitmap( // 크기 증가
-                    bit_array_menu[0],
-                    bit_menu_width + 50,
-                    bit_menu_height + 50,
-                    true
-                )
-                img_array_menu[0].setImageBitmap(resized_bit_array_menu[0]) // 크기 증가한 것 저장
+                binding.menu1Click.visibility = View.VISIBLE // 선택 메뉴 -> 큰 메뉴 보이게
+                binding.menu2Click.visibility =
+                    View.INVISIBLE // 현재 선택한 메뉴 제외 큰 메뉴는 작게 (어차피 framelayout으로 만들었기 때문에 큰 이미지를 띄울 때 굳이 작은 메뉴를 invisible할 필요 엇음)
+                binding.menu3Click.visibility = View.INVISIBLE
                 serving = "menu1"
                 it.tag = TAG_MENU1
             } else { // 메뉴 클릭했지만 해당 메뉴를 원하는 손님이 없음. 잘못된 클릭 -> 감점
-                Toast.makeText(applicationContext, "주문 없음", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "주문 없음(푸딩)", Toast.LENGTH_SHORT).show()
                 if (score <= 0) {
                     score = 0
-                    binding.score.text = "${score}점"
-                } else binding.score.text = "${score--}점"
+                    binding.score.text = "${score*100}원"
+                } else binding.score.text = "${(score--)*100}원"
             }
         }
         // menu2(딸기 케이크) 클릭
         img_array_menu[1].setOnClickListener {
             // 해당 매뉴 주문이 들어왔을 때만 동작 (-> menu2 주문하고 TAG_ON2으로 설정했었음)
             if (img_array_table[0].tag == TAG_ON2 || img_array_table[1].tag == TAG_ON2 || img_array_table[2].tag == TAG_ON2 || img_array_table[3].tag == TAG_ON2) {
-                Toast.makeText(applicationContext, "딸기 케이크", Toast.LENGTH_SHORT).show()
-                resized_bit_array_menu[1] = Bitmap.createScaledBitmap( // 크기 증가
-                    bit_array_menu[1],
-                    img_array_menu[1].width + 50,
-                    img_array_menu[1].height + 50,
-                    true
-                )
-                resized_bit_array_menu
-                img_array_menu[1].setImageBitmap(resized_bit_array_menu[1]) // 크기 증가한 것 저장
+                binding.menu2Click.visibility = View.VISIBLE
+                binding.menu1Click.visibility = View.INVISIBLE
+                binding.menu3Click.visibility = View.INVISIBLE
                 serving = "menu2"
                 it.tag = TAG_MENU2
             } else { // 메뉴 클릭했지만 해당 메뉴를 원하는 손님이 없음. 잘못된 클릭 -> 감점
-                Toast.makeText(applicationContext, "주문 없음", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "주문 없음(케이크)", Toast.LENGTH_SHORT).show()
                 if (score <= 0) {
                     score = 0
-                    binding.score.text = "${score}점"
-                } else binding.score.text = "${score--}점"
+                    binding.score.text = "${score*100}원"
+                } else binding.score.text = "${(score--)*100}원"
             }
         }
         // menu3(치킨) 클릭
         img_array_menu[2].setOnClickListener {
             // 해당 매뉴 주문이 들어왔을 때만 동작 (-> menu3 주문하고 TAG_ON1으로 설정했었음)
             if (img_array_table[0].tag == TAG_ON3 || img_array_table[1].tag == TAG_ON3 || img_array_table[2].tag == TAG_ON3 || img_array_table[3].tag == TAG_ON3) {
-                Toast.makeText(applicationContext, "치킨", Toast.LENGTH_SHORT).show()
-                resized_bit_array_menu[2] = Bitmap.createScaledBitmap( // 크기 증가
-                    bit_array_menu[2],
-                    bit_menu_width + 50,
-                    bit_menu_height + 50,
-                    true
-                )
-                img_array_menu[2].setImageBitmap(resized_bit_array_menu[2]) // 크기 증가한 것 저장
+                binding.menu3Click.visibility = View.VISIBLE
+                binding.menu1Click.visibility = View.INVISIBLE
+                binding.menu2Click.visibility = View.INVISIBLE
                 serving = "menu3"
                 it.tag = TAG_MENU3
             } else { // 메뉴 클릭했지만 해당 메뉴를 원하는 손님이 없음. 잘못된 클릭 -> 감점
-                Toast.makeText(applicationContext, "주문 없음", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "주문 없음(치킨)", Toast.LENGTH_SHORT).show()
                 if (score <= 0) {
                     score = 0
-                    binding.score.text = "${score}점"
-                } else binding.score.text = "${score--}점"
+                    binding.score.text = "${score*100}원"
+                } else binding.score.text = "${(score--)*100}원"
             }
         }
 
@@ -206,38 +176,38 @@ class MainActivity : AppCompatActivity() {
             // 테이블 클릭 이벤트
             img_array_table[i].setOnClickListener {
                 if (it.tag.toString() === serving && serving === "menu1") { //테이블 태그와 서빙 메뉴가 같고, 서빙 메뉴가 메뉴1
-                    Toast.makeText(applicationContext, "서빙 성공", Toast.LENGTH_SHORT).show()
                     img_array_order[i].setImageResource(R.drawable.order_love) // 좋다는 말풍선
-                    img_array_menu[0].setImageBitmap(bit_array_menu[0]) // 테이블 클릭해도 메뉴는 계속 커진 상태
+                    binding.menu1Click.visibility = View.INVISIBLE // 확대 메뉴 가리기
                     img_array_table[i].tag = TAG_ING // 서빙 받으면 먹는 중 태그로 변경
                     score += 3
-                    binding.score.text = "${score}점"
+                    binding.score.text = "${score*100}원"
                     img_array_table[i].setImageResource(R.drawable.table_menu1) // 테이블 위에 음식이 올라간 사진으로 변경
                 } else if (it.tag.toString() === serving && serving === "menu2") {
-                    Toast.makeText(applicationContext, "서빙 성공", Toast.LENGTH_SHORT).show()
                     img_array_order[i].setImageResource(R.drawable.order_love)
-                    img_array_menu[1].setImageBitmap(bit_array_menu[1])
+                    binding.menu2Click.visibility = View.INVISIBLE // 확대 메뉴 가리기
                     img_array_table[i].tag = TAG_ING
                     score += 3
-                    binding.score.text = "${score}점"
+                    binding.score.text = "${score*100}원"
                     img_array_table[i].setImageResource(R.drawable.table_menu2)
                 } else if (it.tag.toString() === serving && serving === "menu3") {
-                    Toast.makeText(applicationContext, "서빙 성공", Toast.LENGTH_SHORT).show()
                     img_array_order[i].setImageResource(R.drawable.order_love)
-                    img_array_menu[2].setImageBitmap(bit_array_menu[2])
+                    binding.menu3Click.visibility = View.INVISIBLE // 확대 메뉴 가리기
                     img_array_table[i].tag = TAG_ING
                     score += 3
-                    binding.score.text = "${score}점"
+                    binding.score.text = "${score*100}원"
                     img_array_table[i].setImageResource(R.drawable.table_menu3)
                 } else {
                     Toast.makeText(applicationContext, "서빙 실패", Toast.LENGTH_SHORT).show()
                     img_array_order[i].setImageResource(R.drawable.order_wrong)
+                    binding.menu1Click.visibility = View.INVISIBLE // 서빙 실패시에도 클릭해서 확대된 메뉴 가리기
+                    binding.menu2Click.visibility = View.INVISIBLE
+                    binding.menu3Click.visibility = View.INVISIBLE
 
                     if (score <= 0) {
                         score = 0
-                        binding.score.text = "${score}점"
+                        binding.score.text = "${score*100}원"
                     } else {
-                        binding.score.text = "${score--}점"
+                        binding.score.text = "${(score--)*100}원"
                     }
                 }
             }
@@ -282,20 +252,20 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // 주문이 제대로 들어왔을 경우 핸들러
+    // 서빙이 주문과 일치할 경우 핸들러
     var ingHandler: Handler = object : Handler() {
         override fun handleMessage(msg: Message) {
             println(msg.arg1.toString() + "번 테이블 먹는 중")
-           // val ran_ing = Random().nextInt(2)
+            // val ran_ing = Random().nextInt(2)
             //if (ran_ing == 0) { //좋다는 인사 말풍선
             img_array_order[msg.arg1].setImageResource(R.drawable.order_love2) // bye인사
         }
     }
 
-    // 밥 먹고 손님 떠날 경우 핸들러
+    // 손님 떠날 경우 핸들러
     var offHandler: Handler = object : Handler() {
         override fun handleMessage(msg: Message) {
-            println("밥 먹은 손님 감")
+            println("손님 감")
             img_array_table[msg.arg1].setImageResource(R.drawable.table1)
             img_array_table[msg.arg1].tag = TAG_OFF // 손님 없음 태그
             img_array_order[msg.arg1].visibility = View.GONE // 끝난 주문 말풍선 없애기
@@ -303,13 +273,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // 주문한지 3초 지났는데 음식 안 온 경우 핸들러
+    // 주문한지 4초 지났는데 음식 안 온 경우 핸들러
     var waitingHandler: Handler = object : Handler() {
         override fun handleMessage(msg: Message) {
             if (score <= 0) {
                 score = 0
-                binding.score.text = "${score}점"
-            } else binding.score.text = "${score--}점" // 1점 감점
+                binding.score.text = "${score*100}원"
+            } else binding.score.text = "${(score--)*100}원" // 1점 감점
             img_array_order[msg.arg1].setImageResource(R.drawable.order_hurry)
         }
     }
@@ -317,7 +287,7 @@ class MainActivity : AppCompatActivity() {
 
     //시간 쓰레드 클래스
     inner class start : Runnable {
-        val MAXTIME = 60
+        val MAXTIME = 30
         override fun run() {
             started = true
             for (i in MAXTIME downTo 0) {
@@ -333,6 +303,12 @@ class MainActivity : AppCompatActivity() {
                     e.printStackTrace()
                 }
             }
+
+            // 결과 액티비티로 이동, 점수 넘기기
+            val intent = Intent(this@MainActivity, ResultActivity::class.java)
+            intent.putExtra("score", score*100)
+            startActivity(intent)
+            finish()
         }
     }
 
@@ -356,9 +332,9 @@ class MainActivity : AppCompatActivity() {
                     Thread.sleep(4000) // 4초 (아하 3초 지나고 나서 아래 코드를 진행해라구나 그니까 3초 지나고 음식을 먹고 있으면 ~고, 그게 아니면 음식이 아직 안 온거고)
                     if (img_array_table[index].tag === TAG_ING) { // 손님 음식 먹는 중 (-> 주문이 제대로 진행됨)
                         val msg2 = Message()
-                        msg2.arg1 = index // ? 어차피 index 전달하는건데 msg1.arg1이어도 상관 없지 않아?
+                        msg2.arg1 = index //
                         val msg3 = Message()
-                        msg3.arg1 = index // ? 마찬가지 - 수정
+                        msg3.arg1 = index
                         ingHandler.sendMessage(msg2)
                         Thread.sleep(400) // 0.4초
                         // 손님 떠남
@@ -366,23 +342,38 @@ class MainActivity : AppCompatActivity() {
                     } else { // 4초 기다렸는데 주문힌 음식이 안 옴 (여전히 태그가 TAG_ON인 상태)
                         val msg4 = Message()
                         msg4.arg1 = index
-                        waitingHandler.sendMessage(msg4)
-                        //2초 더 기다림. 메뉴는 볼 수 없고 대신 hurry 말풍선을 보인다
+                        waitingHandler.sendMessage(msg4) //2초 더 기다림. 메뉴는 볼 수 없고 대신 hurry 말풍선을 보인다
                         Thread.sleep(2000)
                         if (score <= 0) {
                             score = 0
-                            binding.score.text = "${score}점"
-                        } else binding.score.text = "${score--}점"
-
+                            binding.score.text = "${score*100}원"
+                        } else binding.score.text = "${(score--)*100}원"
+                        val msg5 = Message() //?
+                        msg5.arg1 = index
+                        offHandler.sendMessage(msg5) //손님 떠남
                     }
-                    //손님 떠남
-                    val msg5 = Message() //?
-                    msg5.arg1 = index
-                    offHandler.sendMessage(msg5)
+
+
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
             }
         }
     }
+
+    override fun onPause() {
+        super.onPause()
+        mp?.pause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mp?.start()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mp?.stop()
+    }
+
 }

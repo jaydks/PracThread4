@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_15"
         android:layout_marginTop="@dimen/margin_20"
-        android:text="60초"
+        android:text="30초"
         android:textColor="@color/white"
         android:textSize="25sp"
         android:textStyle="bold"
@@ -254,6 +254,14 @@
                 android:layout_gravity="top|center"
                 android:src="@drawable/pudding" />
 
+            <ImageView
+                android:visibility="invisible"
+                android:id="@+id/menu1_click"
+                android:layout_width="@dimen/margin_85"
+                android:layout_height="@dimen/margin_85"
+                android:layout_gravity="top|center"
+                android:src="@drawable/pudding" />
+
         </FrameLayout>
 
 
@@ -286,6 +294,14 @@
                 android:layout_gravity="top|center"
                 android:src="@drawable/strawberrycake" />
 
+            <ImageView
+                android:visibility="invisible"
+                android:id="@+id/menu2_click"
+                android:layout_width="@dimen/margin_85"
+                android:layout_height="@dimen/margin_85"
+                android:layout_gravity="top|center"
+                android:src="@drawable/strawberrycake" />
+
         </FrameLayout>
 
 
@@ -315,6 +331,14 @@
                 android:id="@+id/menu3"
                 android:layout_width="@dimen/margin_75"
                 android:layout_height="@dimen/margin_75"
+                android:layout_gravity="top|center"
+                android:src="@drawable/chicken" />
+
+            <ImageView
+                android:visibility="invisible"
+                android:id="@+id/menu3_click"
+                android:layout_width="@dimen/margin_85"
+                android:layout_height="@dimen/margin_85"
                 android:layout_gravity="top|center"
                 android:src="@drawable/chicken" />
 
